@@ -56,7 +56,7 @@ class MoviesApiMixin:
 class MoviesListApi(MoviesApiMixin, BaseListView):
     model = FilmWork
     http_method_names = ['get']
-    paginate_by = 20
+    paginate_by = 50
 
 
     def get_context_data(self, *, object_list=None, **kwargs):

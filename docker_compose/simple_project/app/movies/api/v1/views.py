@@ -1,5 +1,5 @@
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import Q
+from django.db.models import Q, Value
 from django.http import JsonResponse
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
@@ -18,21 +18,25 @@ class MoviesApiMixin:
                 genre_names=ArrayAgg(
                     'genres__name',
                     distinct=True,
+                    default=Value([]),
                 ),
                 actors=ArrayAgg(
                     'personfilmwork__person__full_name',
                     filter=Q(personfilmwork__role=Roles.ACTOR),
                     distinct=True,
+                    default=Value([]),
                 ),
                 directors=ArrayAgg(
                     'personfilmwork__person__full_name',
                     filter=Q(personfilmwork__role=Roles.DIRECTOR),
                     distinct=True,
+                    default=Value([]),
                 ),
                 writers=ArrayAgg(
                     'personfilmwork__person__full_name',
                     filter=Q(personfilmwork__role=Roles.WRITER),
                     distinct=True,
+                    default=Value([]),
                 ),
             )
             .values(

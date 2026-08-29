@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -25,26 +26,26 @@ class Genre(UUIDMixin, TimeStampedMixin):
     name = models.CharField(_('genre'), max_length=255)
     description = models.TextField(_('description'), blank=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         db_table = 'content"."genre'
         verbose_name = _('genre')
         verbose_name_plural = _('genres')
         ordering = ('name',)
 
+    def __str__(self):
+        return self.name
+
 
 class Person(UUIDMixin, TimeStampedMixin):
     full_name = models.CharField(_('name'), max_length=255)
-
-    def __str__(self):
-        return self.full_name
 
     class Meta:
         db_table = 'content"."person'
         verbose_name = _('person')
         verbose_name_plural = _('persons')
+
+    def __str__(self):
+        return self.full_name
 
 
 class FilmTypes(models.TextChoices):
@@ -77,9 +78,6 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
     )
     persons = models.ManyToManyField(Person, through='PersonFilmWork')
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         db_table = 'content"."film_work'
         verbose_name = _('film')
@@ -92,6 +90,9 @@ class FilmWork(UUIDMixin, TimeStampedMixin):
             ),
         ]
 
+    def __str__(self):
+        return self.title
+
 
 class GenreFilmWork(UUIDMixin):
     genre = models.ForeignKey(
@@ -101,9 +102,6 @@ class GenreFilmWork(UUIDMixin):
     )
     film_work = models.ForeignKey(FilmWork, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.genre.name
 
     class Meta:
         db_table = 'content"."genre_film_work'
@@ -115,6 +113,9 @@ class GenreFilmWork(UUIDMixin):
                 name='film_work_genre_idx',
             ),
         ]
+
+    def __str__(self):
+        return self.genre.name
 
 
 class Roles(models.TextChoices):
@@ -138,9 +139,6 @@ class PersonFilmWork(UUIDMixin):
     )
     created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.person.full_name
-
     class Meta:
         db_table = 'content"."person_film_work'
         verbose_name = _('person')
@@ -151,3 +149,6 @@ class PersonFilmWork(UUIDMixin):
                 name='film_work_person_role_idx',
             ),
         ]
+
+    def __str__(self):
+        return self.person.full_name

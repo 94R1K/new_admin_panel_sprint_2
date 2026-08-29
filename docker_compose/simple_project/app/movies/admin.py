@@ -32,8 +32,7 @@ class FilmWorkAdmin(admin.ModelAdmin):
     search_fields = ('title', 'description', 'id')
 
     def get_queryset(self, request):
-        queryset = super().get_queryset(request).prefetch_related('genres')
-        return queryset
+        return super().get_queryset(request).prefetch_related('genres')
 
     def get_genres(self, obj):
         return ','.join([genre.name for genre in obj.genres.all()])
